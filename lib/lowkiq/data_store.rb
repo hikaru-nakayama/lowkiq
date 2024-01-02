@@ -7,7 +7,8 @@ module Lowkiq
         @queue_access = QueueAccess.new(redis)
     end
 
-    def_delegators :@queue_access, :push_to_queue
+    def_delegators :@queue_access, :push_to_queue,
+                                   :pop_from_queue
 
     class QueueAccess
       def initialize(redis)
@@ -19,6 +20,10 @@ module Lowkiq
           piped.sadd(:queues, [queue.to_s])
           piped.rpush "queue:#{queue}", encoded_item
         end
+      end
+
+      def pop_from_queue(queue)
+        @redis.lpop("queue:#{queue}")
       end
     end
   end
