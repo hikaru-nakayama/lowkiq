@@ -13,3 +13,4 @@ else
 end
 
 gem "rake", "~> 13.0"
+gem 'pry'
