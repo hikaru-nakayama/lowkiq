@@ -22,8 +22,13 @@ module Lowkiq
     self.redis = 'redis://localhost:6379'
     @data_store
   end
+  alias :data_store :redis
 
   def push(queue, item)
-    redis.push_to_queue(queue, item)
+    data_store.push_to_queue(queue, item)
+  end
+
+  def pop(queue)
+    data_store.pop_from_queue(queue)
   end
 end
