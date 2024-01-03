@@ -1,3 +1,4 @@
+require 'lowkiq'
 module Lowkiq
   class Worker
 
@@ -11,6 +12,7 @@ module Lowkiq
         if job = reserve
             job.perform
         else
+            Lowkiq.logger.debug("Sleeping for #{interval} seconds")
             sleep interval
         end
       end    

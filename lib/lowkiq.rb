@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'multi_json'
+require 'mono_logger'
 require 'redis'
 require_relative "lowkiq/version"
 require_relative "lowkiq/data_store"
@@ -7,6 +8,7 @@ require "lowkiq/worker"
 
 module Lowkiq
   extend self
+  attr_accessor :logger
 
   def encode(object)
     if MultiJson.respond_to?(:dump) && MultiJson.respond_to?(:load)
@@ -58,3 +60,5 @@ module Lowkiq
     data_store.queue_names
   end
 end
+
+Lowkiq.logger = MonoLogger.new(STDOUT)
