@@ -3,6 +3,7 @@ require 'multi_json'
 require 'redis'
 require_relative "lowkiq/version"
 require_relative "lowkiq/data_store"
+require "lowkiq/worker"
 
 module Lowkiq
   extend self

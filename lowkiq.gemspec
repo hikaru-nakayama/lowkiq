@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+$LOAD_PATH.unshift 'lib'
 require_relative "lib/lowkiq/version"
 
 Gem::Specification.new do |spec|
