@@ -8,7 +8,8 @@ module Lowkiq
     end
 
     def_delegators :@queue_access, :push_to_queue,
-                                   :pop_from_queue
+                                   :pop_from_queue,
+                                   :queue_names
 
     class QueueAccess
       def initialize(redis)
@@ -24,6 +25,10 @@ module Lowkiq
 
       def pop_from_queue(queue)
         @redis.lpop("queue:#{queue}")
+      end
+
+      def queue_names
+        Array(@redis.smembers(:queues))
       end
     end
   end

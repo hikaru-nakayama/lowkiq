@@ -31,4 +31,12 @@ module Lowkiq
   def pop(queue)
     data_store.pop_from_queue(queue)
   end
+
+  def enqueue(klass, *args)
+    Job.create(klass.instance_variable_get(:@queue), klass)
+  end
+
+  def queues
+    data_store.queue_names
+  end
 end
