@@ -5,6 +5,7 @@ require 'redis'
 require_relative "lowkiq/version"
 require_relative "lowkiq/data_store"
 require "lowkiq/worker"
+require "lowkiq/job"
 
 module Lowkiq
   extend self
@@ -18,8 +19,32 @@ module Lowkiq
     end
   end
 
-  def constantize(camel_cased_word)
+  def decode(object)
+    return unless object
+
+    begin
+      if MultiJson.respond_to?(:dump) && MultiJson.respond_to?(:load)
+        MultiJson.load object
+      else
+        MultiJson.decode object
+      end
+    rescue ::MultiJson::DecodeError => e
+      raise Helpers::DecodeException, e.message, e.backtrace
+    end
+  end
+
+  def constanize(camel_cased_word)
     camel_cased_word = camel_cased_word.to_s
+    names = camel_cased_word.split('::') 
+    constant = Object
+    names.each do |name|
+      if constant.const_defined?(name)
+        constant = constant.const_get(name)
+      else
+        constant = constant.const_missing(name)
+      end
+    end
+    constant
   end
 
   def redis=(server)
@@ -45,7 +70,7 @@ module Lowkiq
   end
 
   def pop(queue)
-    data_store.pop_from_queue(queue)
+    decode(data_store.pop_from_queue(queue))
   end
 
   def enqueue(klass, *args)

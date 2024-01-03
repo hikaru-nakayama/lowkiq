@@ -1,4 +1,5 @@
 require 'lowkiq'
+require 'pry'
 module Lowkiq
   class Worker
 
@@ -20,7 +21,9 @@ module Lowkiq
 
     def reserve
       @queues.each do |queue|
+        Lowkiq.logger.debug("Checking #{queue}")
         if job = Job.reserve(queue)
+            Lowkiq.logger.debug("Found job on #{queue}")
             return job
         end
       end

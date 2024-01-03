@@ -1,3 +1,4 @@
+require 'pry'
 module Lowkiq
   class Job 
     def initialize(queue, payload)
@@ -25,7 +26,7 @@ module Lowkiq
     end
 
     def constantize(camel_cased_word)
-        Lowkiq.constantize(camel_cased_word)
+        Lowkiq.constanize(camel_cased_word)
     end
   end
 end
